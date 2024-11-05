@@ -19,6 +19,7 @@ import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { ArcElement, BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Title, Tooltip } from 'chart.js';
 import { motion } from 'framer-motion';
 import { AlertCircle, Calendar, Car, CarFront, CheckCircle2, ChevronDown, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, ChevronUp, Clock, Filter, Link, Palette, PenSquare, Search, Sparkles, Tag, X } from 'lucide-react';
+import Carrusel from '@/components/Carrusel';
 
 ChartJS.register(
     CategoryScale,
@@ -253,7 +254,7 @@ function Dashboard({ carsData = [] }) {
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ duration: 0.5 }}
-                                    className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-5"
+                                    className="grid grid-cols-3 gap-4 mb-5"
                                 >
                                     <Card>
                                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -493,6 +494,10 @@ function Dashboard({ carsData = [] }) {
                                         <ChevronsRight className="h-4 w-4" />
                                     </Button>
                                 </div>
+
+                                <dir>
+                                    <Carrusel />
+                                </dir>
                             </TabsContent>
 
                             {/* Add form */}

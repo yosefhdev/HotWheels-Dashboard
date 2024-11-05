@@ -1,12 +1,15 @@
 /* eslint-disable react/prop-types */
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { motion } from 'framer-motion'
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { Bar, Pie } from 'react-chartjs-2'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
+import { RadarChart, PolarGrid, PolarAngleAxis, Radar } from 'recharts'
 
 function Graficas({ cars, carTypes }) {
+console.log("🚀 ~ Graficas ~ cars:", cars)
 
     const [selectedYear, setSelectedYear] = useState('all');
 
@@ -48,6 +51,22 @@ function Graficas({ cars, carTypes }) {
             cantidad: count
         }));
     }, [cars, selectedYear]);
+
+    // Modelos por marca de autos
+    const [chartData, setChartData] = useState([])
+    useEffect(() => {
+        const brandCounts = cars.reduce((acc, car) => {
+            acc[car.marca] = (acc[car.marca] || 0) + 1
+            return acc
+        }, {})
+
+        const formattedData = Object.entries(brandCounts).map(([brand, count]) => ({
+            brand,
+            count
+        }))
+
+        setChartData(formattedData)
+    }, [cars])
 
     return (
         <motion.div
@@ -106,7 +125,44 @@ function Graficas({ cars, carTypes }) {
                     />
                 </CardContent>
             </Card>
-            <Card className="sm:col-span-2">
+            <Card className="sm:col-span-3 w-full max-w-4xl mx-auto">
+                <CardHeader>
+                    <CardTitle className="text-2xl sm:text-3xl md:text-4xl text-center">Modelos de Autos por Marca</CardTitle>
+                    <CardDescription className="text-sm sm:text-base md:text-lg text-center">
+                        Distribución de modelos entre diferentes marcas de automóviles
+                    </CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <ChartContainer
+                        config={{
+                            count: {
+                                label: "Número de Modelos",
+                                color: "hsl(var(--chart-1))",
+                            },
+                        }}
+                        className="w-full aspect-square max-w-[500px] mx-auto"
+                    >
+                        <ResponsiveContainer width="100%" height="100%">
+                            <RadarChart data={chartData} margin={{ top: 20, right: 30, bottom: 20, left: 30 }}>
+                                <PolarGrid />
+                                <PolarAngleAxis
+                                    dataKey="brand"
+                                    tick={{ fill: 'hsl(var(--foreground))', fontSize: '12px' }}
+                                />
+                                <Radar
+                                    name="Modelos"
+                                    dataKey="count"
+                                    stroke="var(--color-count)"
+                                    fill="var(--color-count)"
+                                    fillOpacity={0.6}
+                                />
+                                <ChartTooltip content={<ChartTooltipContent />} />
+                            </RadarChart>
+                        </ResponsiveContainer>
+                    </ChartContainer>
+                </CardContent>
+            </Card>
+            <Card className="md:col-span-3">
                 <CardHeader>
                     <div className="flex justify-between items-center">
                         <CardTitle>Autos Agregados por Mes</CardTitle>
@@ -161,8 +217,10 @@ function Graficas({ cars, carTypes }) {
                 </CardContent>
             </Card>
 
+
         </motion.div>
     );
 }
 
 export default Graficas;
+
