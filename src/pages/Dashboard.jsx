@@ -21,6 +21,9 @@ import { motion } from 'framer-motion';
 import { AlertCircle, Calendar, Car, CarFront, CheckCircle2, ChevronDown, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, ChevronUp, Clock, Filter, Link, Palette, PenSquare, Search, Sparkles, Tag, X } from 'lucide-react';
 import Carrusel from '@/components/Carrusel';
 import EditForm from '@/components/EditForm';
+import StatsCards from '@/components/StatsCards';
+import Filters from '@/components/Filters';
+import CarsTable from '@/components/CarsTable';
 
 ChartJS.register(
     CategoryScale,
@@ -95,10 +98,10 @@ function Dashboard({ carsData = [] }) {
     const filteredCars = useMemo(() => {
         return sortedCars.filter(car =>
             (searchTerm === '' || Object.values(car).some(value =>
-                value.toString().toLowerCase().includes(searchTerm.toLowerCase())
+                value != null && value.toString().toLowerCase().includes(searchTerm.toLowerCase())
             )) &&
             (filters.brands.length === 0 || filters.brands.includes(car.marca)) &&
-            (filters.anios.length === 0 || filters.anios.includes(car.anio.toString())) &&
+            (filters.anios.length === 0 || filters.anios.includes(car.anio?.toString())) &&
             (filters.types.length === 0 || filters.types.includes(car.tipo))
         );
     }, [sortedCars, searchTerm, filters]);
@@ -137,7 +140,7 @@ function Dashboard({ carsData = [] }) {
         return newErrors
     }
 
-    // Falta terminar esta funcion
+    // Actualizar Carro
     const updateCar = async () => {
         const newErrors = validateCar(selectedCar)
         if (Object.keys(newErrors).length === 0) {
@@ -251,40 +254,10 @@ function Dashboard({ carsData = [] }) {
                     <main className="container mx-auto p-4 pb-20">
                         <Tabs value={activeTab} onValueChange={setActiveTab}>
                             <TabsContent value="home" className="space-y-4">
-                                <motion.div
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.5 }}
-                                    className="grid grid-cols-3 gap-4 mb-5"
-                                >
-                                    <Card>
-                                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                            <CardTitle className="text-sm font-medium">Total de Autos</CardTitle>
-                                            <Car className="h-4 w-4 text-muted-foreground" />
-                                        </CardHeader>
-                                        <CardContent>
-                                            <div className="text-2xl font-bold">{cars.length}</div>
-                                        </CardContent>
-                                    </Card>
-                                    <Card>
-                                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                            <CardTitle className="text-sm font-medium">Autos Básicos</CardTitle>
-                                            <CarFront className="h-4 w-4 text-muted-foreground" />
-                                        </CardHeader>
-                                        <CardContent>
-                                            <div className="text-2xl font-bold">{carsByType[0]}</div>
-                                        </CardContent>
-                                    </Card>
-                                    <Card>
-                                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                            <CardTitle className="text-sm font-medium">Autos Premium</CardTitle>
-                                            <Sparkles className="h-4 w-4 text-muted-foreground" />
-                                        </CardHeader>
-                                        <CardContent>
-                                            <div className="text-2xl font-bold">{carsByType[1]}</div>
-                                        </CardContent>
-                                    </Card>
-                                </motion.div>
+                                <StatsCards
+                                    cars={cars}
+                                    carsByType={carsByType}
+                                />
 
                                 <div className="flex flex-wrap gap-4 mb-4">
                                     <div className="flex-grow relative">
@@ -297,204 +270,30 @@ function Dashboard({ carsData = [] }) {
                                             className="pl-10"
                                         />
                                     </div>
-                                    <Dialog>
-                                        <DialogTrigger asChild>
-                                            <Button variant="outline">
-                                                <Filter className="mr-2 h-4 w-4" /> Filtros
-                                            </Button>
-                                        </DialogTrigger>
-                                        <DialogContent className="sm:max-w-[750px] h-[80%]">
-                                            <DialogHeader>
-                                                <DialogTitle>Filtros</DialogTitle>
-                                            </DialogHeader>
-                                            <div className="grid grid-cols-1 gap-4">
-                                                <ScrollArea className="h-[90%] w-full rounded-md border p-4">
-                                                    <div className="flex gap-20 justify-center">
-                                                        <div>
-                                                            <h3 className="mb-2 font-semibold flex items-center"><Car className="mr-2 h-4 w-4" /> Marca</h3>
-                                                            {uniqueBrands.map(brand => (
-                                                                <div key={brand} className="flex items-center space-x-2">
-                                                                    <Checkbox
-                                                                        id={`brand-${brand}`}
-                                                                        checked={filters.brands.includes(brand)}
-                                                                        onCheckedChange={() => handleFilterChange('brands', brand)}
-                                                                    />
-                                                                    <label htmlFor={`brand-${brand}`}>{brand}</label>
-                                                                </div>
-                                                            ))}
-                                                        </div>
-                                                        <div className='flex flex-col gap-5'>
-                                                            <div>
-                                                                <h3 className="mb-2 font-semibold flex items-center"><Calendar className="mr-2 h-4 w-4" /> Año</h3>
-                                                                {uniqueanios.map(anio => (
-                                                                    <div key={anio} className="flex items-center space-x-2">
-                                                                        <Checkbox
-                                                                            id={`anio-${anio}`}
-                                                                            checked={filters.anios.includes(anio.toString())}
-                                                                            onCheckedChange={() => handleFilterChange('anios', anio.toString())}
-                                                                        />
-                                                                        <label htmlFor={`anio-${anio}`}>{anio}</label>
-                                                                    </div>
-                                                                ))}
-                                                            </div>
-                                                            <div>
-                                                                <h3 className="mb-2 font-semibold flex items-center"><Tag className="mr-2 h-4 w-4" /> Tipo</h3>
-                                                                {carTypes.map(type => (
-                                                                    <div key={type} className="flex items-center space-x-2">
-                                                                        <Checkbox
-                                                                            id={`type-${type}`}
-                                                                            checked={filters.types.includes(type)}
-                                                                            onCheckedChange={() => handleFilterChange('types', type)}
-                                                                        />
-                                                                        <label htmlFor={`type-${type}`}>{type}</label>
-                                                                    </div>
-                                                                ))}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </ScrollArea>
-                                            </div>
-                                        </DialogContent>
-                                    </Dialog>
+                                    <Filters
+                                        uniqueBrands={uniqueBrands}
+                                        uniqueanios={uniqueanios}
+                                        carTypes={carTypes}
+                                        filters={filters}
+                                        handleFilterChange={handleFilterChange}
+                                    />
                                 </div>
-
-                                <div className="overflow-x-auto">
-                                    <Table>
-                                        <TableHeader>
-                                            <TableRow>
-                                                <TableHead>Imagen</TableHead>
-                                                <TableHead onClick={() => requestSort('marca')} className="cursor-pointer">
-                                                    <div className='flex items-center justify-center'>
-                                                        <Car className="inline-block mr-2 h-4 w-4" />Marca {getSortIcon('marca')}
-                                                    </div>
-                                                </TableHead>
-                                                <TableHead onClick={() => requestSort('modelo')} className="cursor-pointer">
-                                                    <div className='flex items-center justify-center'>
-                                                        <PenSquare className="inline-block mr-2 h-4 w-4" />Modelo {getSortIcon('modelo')}
-                                                    </div>
-                                                </TableHead>
-                                                <TableHead onClick={() => requestSort('version')} className="cursor-pointer">
-                                                    <div className='flex items-center justify-center'>
-                                                        <Tag className="inline-block mr-2 h-4 w-4" />Versión {getSortIcon('version')}
-                                                    </div>
-                                                </TableHead>
-                                                <TableHead onClick={() => requestSort('anio')} className="cursor-pointer">
-                                                    <div className='flex items-center justify-center'>
-                                                        <Calendar className="inline-block mr-2 h-4 w-4" />Año{getSortIcon('anio')}
-                                                    </div>
-                                                </TableHead>
-                                                <TableHead onClick={() => requestSort('tipo')} className="cursor-pointer">
-                                                    <div className='flex items-center justify-center'>
-                                                        <Tag className="inline-block mr-2 h-4 w-4" />Tipo {getSortIcon('tipo')}
-                                                    </div>
-                                                </TableHead>
-                                                <TableHead>
-                                                    <div className='flex items-center justify-center'>
-                                                        <Palette className="inline-block mr-2 h-4 w-4" />Color
-                                                    </div>
-                                                </TableHead>
-                                                <TableHead onClick={() => requestSort('addedDate')} className="cursor-pointer">
-                                                    <div className='flex items-center justify-center text-nowrap'>
-                                                        <Clock className="inline-block mr-2 h-4 w-4" />Fecha de Adición {getSortIcon('addedDate')}
-                                                    </div>
-                                                </TableHead>
-                                                {user == null ? null : <TableHead>Acciones</TableHead>}
-                                                {/* <TableHead>Acciones</TableHead> */}
-                                            </TableRow>
-                                        </TableHeader>
-                                        <TableBody>
-                                            {paginatedCars.map((car) => (
-                                                <TableRow key={car.id}>
-                                                    <TableCell>
-                                                        <img src={car.image_url} alt={`${car.brand} ${car.model}`} className="w-10 h-10 object-cover rounded" />
-                                                    </TableCell>
-                                                    <TableCell>{car.marca}</TableCell>
-                                                    <TableCell>{car.modelo}</TableCell>
-                                                    <TableCell>{car.version}</TableCell>
-                                                    <TableCell>{car.anio}</TableCell>
-                                                    <TableCell>{car.tipo}</TableCell>
-                                                    <TableCell>
-                                                        <div className='flex flex-row items-center text-nowrap'>
-                                                            <span className="w-6 h-6 rounded-full inline-block mr-2" style={{ backgroundColor: car.color }}></span>
-                                                            {car.color}
-                                                        </div>
-                                                    </TableCell>
-                                                    <TableCell>{formatDate(car.createdAt)}</TableCell>
-                                                    {user == null ? null : (
-                                                        <TableCell>
-                                                            <Button variant="ghost" size="sm" onClick={() => { setSelectedCar(car); setIsEditModalOpen(true); }}>
-                                                                <PenSquare className="h-4 w-4" />
-                                                            </Button>
-                                                            <Button variant="ghost" size="sm" onClick={() => deleteCar(car.id, car.image_path)}>
-                                                                <X className="h-4 w-4" />
-                                                            </Button>
-                                                        </TableCell>
-                                                    )}
-
-                                                </TableRow>
-                                            ))}
-                                        </TableBody>
-                                    </Table>
-                                </div>
-
-                                <div className="flex items-center justify-between mt-4">
-                                    <div className="flex items-center space-x-2">
-                                        <span>Autos por página:</span>
-                                        <Select
-                                            value={itemsPerPage.toString()}
-                                            onValueChange={(value) => {
-                                                setItemsPerPage(Number(value));
-                                                setCurrentPage(1);
-                                            }}
-                                        >
-                                            <SelectTrigger className="w-[70px]">
-                                                <SelectValue />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                {[5, 10, 20, 50].map((value) => (
-                                                    <SelectItem key={value} value={value.toString()}>
-                                                        {value}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                    </div>
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        onClick={() => setCurrentPage(1)}
-                                        disabled={currentPage === 1}
-                                    >
-                                        <ChevronsLeft className="h-4 w-4" />
-                                    </Button>
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                                        disabled={currentPage === 1}
-                                    >
-                                        <ChevronLeft className="h-4 w-4" />
-                                    </Button>
-                                    <span>
-                                        {currentPage} de {totalPages}
-                                    </span>
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                                        disabled={currentPage === totalPages}
-                                    >
-                                        <ChevronRight className="h-4 w-4" />
-                                    </Button>
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        onClick={() => setCurrentPage(totalPages)}
-                                        disabled={currentPage === totalPages}
-                                    >
-                                        <ChevronsRight className="h-4 w-4" />
-                                    </Button>
-                                </div>
+                                {/* CarsTable({requestSort, getSortIcon, user, paginatedCars, formatDate, setSelectedCar, setIsEditModalOpen, deleteCar, itemsPerPage, setItemsPerPage, setCurrentPage, currentPage, totalPages}) */}
+                                <CarsTable
+                                    requestSort={requestSort}
+                                    getSortIcon={getSortIcon}
+                                    user={user}
+                                    paginatedCars={paginatedCars}
+                                    formatDate={formatDate}
+                                    setSelectedCar={setSelectedCar}
+                                    setIsEditModalOpen={setIsEditModalOpen}
+                                    deleteCar={deleteCar}
+                                    itemsPerPage={itemsPerPage}
+                                    setItemsPerPage={setItemsPerPage}
+                                    setCurrentPage={setCurrentPage}
+                                    currentPage={currentPage}
+                                    totalPages={totalPages}
+                                />
 
                                 <dir>
                                     <Carrusel />
