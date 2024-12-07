@@ -20,6 +20,7 @@ import { ArcElement, BarElement, CategoryScale, Chart as ChartJS, Legend, Linear
 import { motion } from 'framer-motion';
 import { AlertCircle, Calendar, Car, CarFront, CheckCircle2, ChevronDown, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, ChevronUp, Clock, Filter, Link, Palette, PenSquare, Search, Sparkles, Tag, X } from 'lucide-react';
 import Carrusel from '@/components/Carrusel';
+import EditForm from '@/components/EditForm';
 
 ChartJS.register(
     CategoryScale,
@@ -130,7 +131,7 @@ function Dashboard({ carsData = [] }) {
         if (!car.version) newErrors.version = 'La versión es requerida'
         if (!car.color) newErrors.color = 'El color es requerido'
         if (!car.tipo) newErrors.tipo = 'El tipo es requerido'
-        if (!car.addedDate) newErrors.addedDate = 'La fecha de adición es requerida'
+        // if (!car.addedDate) newErrors.addedDate = 'La fecha de adición es requerida'
         // if (!car.image_url) newErrors.image = 'La imagen es requerida'
         // if (!car.image_path) newErrors.image = 'La imagen es requerida'
         return newErrors
@@ -535,108 +536,16 @@ function Dashboard({ carsData = [] }) {
                             <DialogHeader>
                                 <DialogTitle>Editar Auto</DialogTitle>
                             </DialogHeader>
-                            {selectedCar && (
-                                <form onSubmit={(e) => { e.preventDefault(); updateCar(); }}
-                                    className="flex flex-col gap-6">
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        <div className='max-w-sm mx-auto md:max-w-full'>
-                                            <div className="aspect-[5/6] overflow-hidden rounded-lg">
-                                                <img
-                                                    src={selectedCar.image_url}
-                                                    alt={`${selectedCar.marca} ${selectedCar.model}`}
-                                                    className="w-full h-full object-cover"
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className="space-y-4">
-                                            <div className="flex items-center space-x-2">
-                                                <Car className="h-4 w-4 flex-shrink-0" />
-                                                <Input
-                                                    placeholder="Marca"
-                                                    value={selectedCar.marca}
-                                                    onChange={(e) => setSelectedCar({ ...selectedCar, marca: e.target.value })}
-                                                    required
-                                                />
-                                            </div>
-                                            {errors.marca && <p className="text-red-500 text-sm">{errors.marca}</p>}
 
-                                            <div className="flex items-center space-x-2">
-                                                <PenSquare className="h-4 w-4" />
-                                                <Input
-                                                    placeholder="Modelo"
-                                                    value={selectedCar.modelo}
-                                                    onChange={(e) => setSelectedCar({ ...selectedCar, modelo: e.target.value })}
-                                                    required
-                                                />
-                                            </div>
-                                            {errors.modelo && <p className="text-red-500 text-sm">{errors.modelo}</p>}
-
-                                            <div className="flex items-center space-x-2">
-                                                <Tag className="h-4 w-4" />
-                                                <Input
-                                                    placeholder="Versión"
-                                                    value={selectedCar.version}
-                                                    onChange={(e) => setSelectedCar({ ...selectedCar, version: e.target.value })}
-                                                    required
-                                                />
-                                            </div>
-                                            {errors.version && <p className="text-red-500 text-sm">{errors.version}</p>}
-
-                                            <div className="flex items-center space-x-2">
-                                                <Calendar className="h-4 w-4" />
-                                                <Input
-                                                    placeholder="Año"
-                                                    type="number"
-                                                    value={selectedCar.anio}
-                                                    onChange={(e) => setSelectedCar({ ...selectedCar, anio: e.target.value })}
-                                                />
-                                            </div>
-
-                                            <div className="flex items-center space-x-2">
-                                                <Palette className="h-4 w-4" />
-                                                <Input
-                                                    type="color"
-                                                    value={selectedCar.color}
-                                                    onChange={(e) => setSelectedCar({ ...selectedCar, color: e.target.value })}
-                                                    required
-                                                />
-                                            </div>
-                                            {errors.color && <p className="text-red-500 text-sm">{errors.color}</p>}
-
-                                            <div className="flex items-center space-x-2">
-                                                <Tag className="h-4 w-4" />
-                                                <Select
-                                                    value={selectedCar.tipo}
-                                                    onValueChange={(value) => setSelectedCar({ ...selectedCar, tipo: value })}
-                                                    required
-                                                >
-                                                    <SelectTrigger className="w-full">
-                                                        <SelectValue placeholder="Tipo" />
-                                                    </SelectTrigger>
-                                                    <SelectContent>
-                                                        <SelectItem value="Básico">Básico</SelectItem>
-                                                        <SelectItem value="Premium">Premium</SelectItem>
-                                                    </SelectContent>
-                                                </Select>
-                                            </div>
-                                            {errors.tipo && <p className="text-red-500 text-sm">{errors.tipo}</p>}
-
-                                            <div className="flex items-center space-x-2">
-                                                <Link className="h-4 w-4" />
-                                                <Input
-                                                    placeholder="URL de la imagen"
-                                                    value={selectedCar.image_url}
-                                                    onChange={(e) => setSelectedCar({ ...selectedCar, image_url: e.target.value })}
-                                                    required
-                                                />
-                                            </div>
-                                            {errors.image_url && <p className="text-red-500 text-sm">{errors.image_url}</p>}
-                                        </div>
-                                    </div>
-                                    <Button type="submit" className="w-full mt-auto">Guardar Cambios</Button>
-
-                                </form>
-                            )}
+                            {/* setNotification, errors, setErrors, setActiveTab, validateCar, updateCarInList, selectedCar  */}
+                            <EditForm
+                                setNotification={setNotification}
+                                setActiveTab={setActiveTab}
+                                updateCarInList={updateCar}
+                                selectedCar={selectedCar}
+                                setIsEditModalOpen={setIsEditModalOpen}
+                                setCars={setCars}
+                            />
                         </DialogContent>
                     </Dialog>
                 </div>
