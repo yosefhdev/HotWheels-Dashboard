@@ -3,9 +3,11 @@
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Calendar, Car, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Clock, Palette, PenSquare, Tag, X } from 'lucide-react';
+import { Calendar, Car, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Clock, Palette, PenSquare, Tag, X, Image } from 'lucide-react';
+import { FaCar } from "react-icons/fa6";
 
 function CarsTable({ requestSort, getSortIcon, user, paginatedCars, formatDate, setSelectedCar, setIsEditModalOpen, deleteCar, itemsPerPage, setItemsPerPage, setCurrentPage, currentPage, totalPages }) {
+    console.log("🚀 ~ CarsTable ~ paginatedCars:", paginatedCars)
 
     return (
         <div>
@@ -13,7 +15,11 @@ function CarsTable({ requestSort, getSortIcon, user, paginatedCars, formatDate, 
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead>Imagen</TableHead>
+                            <TableHead>
+                                <div className='flex items-center justify-center'>
+                                    <Image className="inline-block mr-2 h-4 w-4" /> Imagen
+                                </div>
+                            </TableHead>
                             <TableHead onClick={() => requestSort('marca')} className="cursor-pointer">
                                 <div className='flex items-center justify-center'>
                                     <Car className="inline-block mr-2 h-4 w-4" />Marca {getSortIcon('marca')}
@@ -56,21 +62,29 @@ function CarsTable({ requestSort, getSortIcon, user, paginatedCars, formatDate, 
                     <TableBody>
                         {paginatedCars.map((car) => (
                             <TableRow key={car.id}>
-                                <TableCell>
-                                    <img src={car.image_url} alt={`${car.brand} ${car.model}`} className="w-10 h-10 object-cover rounded" />
+                                <TableCell className="">
+                                    {!car.image_url ? (
+                                        <FaCar className="size-8 mx-auto" />
+                                    ) : (
+                                        <img
+                                            src={car.image_url}
+                                            alt={`${car.brand} ${car.model}`}
+                                            className="w-10 h-10 object-cover rounded mx-auto"
+                                        />
+                                    )}
                                 </TableCell>
-                                <TableCell>{car.marca}</TableCell>
-                                <TableCell>{car.modelo}</TableCell>
-                                <TableCell>{car.version}</TableCell>
-                                <TableCell>{car.anio}</TableCell>
-                                <TableCell>{car.tipo}</TableCell>
-                                <TableCell>
-                                    <div className='flex flex-row items-center text-nowrap'>
+                                <TableCell className="text-center">{car.marca}</TableCell>
+                                <TableCell className="text-center">{car.modelo}</TableCell>
+                                <TableCell className="text-center">{car.version}</TableCell>
+                                <TableCell className="text-center">{car.anio}</TableCell>
+                                <TableCell className="text-center">{car.tipo}</TableCell>
+                                <TableCell className="text-center">
+                                    <div className='flex flex-row items-center justify-center text-nowrap'>
                                         <span className="w-6 h-6 rounded-full inline-block mr-2" style={{ backgroundColor: car.color }}></span>
                                         {car.color}
                                     </div>
                                 </TableCell>
-                                <TableCell>{formatDate(car.createdAt)}</TableCell>
+                                <TableCell className="text-center">{formatDate(car.created_at)}</TableCell>
                                 {user == null ? null : (
                                     <TableCell>
                                         <Button variant="ghost" size="sm" onClick={() => { setSelectedCar(car); setIsEditModalOpen(true); }}>

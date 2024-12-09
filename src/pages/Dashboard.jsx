@@ -58,6 +58,7 @@ function Notification({ message, success, onClose }) {
 
 // eslint-disable-next-line react/prop-types
 function Dashboard({ carsData = [] }) {
+    // console.log("🚀 ~ Dashboard ~ carsData:", carsData)
     const [cars, setCars] = useState(carsData);
     const [user, setUser] = useState(null);
     const [activeTab, setActiveTab] = useState('home')
@@ -152,7 +153,7 @@ function Dashboard({ carsData = [] }) {
             setErrors(newErrors)
         }
     }
-
+    // Eliminar Carro
     const deleteCar = async (carId, imagePath) => {
         setLoading(true)
 
@@ -204,7 +205,7 @@ function Dashboard({ carsData = [] }) {
 
     const formatDate = (dateString) => {
         const date = new Date(dateString)
-        const options = { day: '2-digit', month: 'long', anio: 'numeric' }
+        const options = { day: '2-digit', month: 'long', year: 'numeric' }
         return date.toLocaleDateString('es-MX', options)
     }
 
