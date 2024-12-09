@@ -7,7 +7,6 @@ import { Calendar, Car, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, 
 import { FaCar } from "react-icons/fa6";
 
 function CarsTable({ requestSort, getSortIcon, user, paginatedCars, formatDate, setSelectedCar, setIsEditModalOpen, deleteCar, itemsPerPage, setItemsPerPage, setCurrentPage, currentPage, totalPages }) {
-    console.log("🚀 ~ CarsTable ~ paginatedCars:", paginatedCars)
 
     return (
         <div>

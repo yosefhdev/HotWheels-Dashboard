@@ -13,30 +13,36 @@ function StatsCards({ cars, carsByType }) {
             className="grid grid-cols-3 gap-4 mb-5"
         >
             <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardHeader className="flex flex-col sm:flex-row items-center justify-center gap-2 pb-2">
+                    <div>
+                        <Car className="h-4 w-4 text-muted-foreground" />
+                    </div>
                     <CardTitle className="text-sm font-medium">Total de Autos</CardTitle>
-                    <Car className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                    <div className="text-2xl font-bold">{cars.length}</div>
+                    <div className="text-2xl font-bold text-center">{cars.length}</div>
                 </CardContent>
             </Card>
             <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardHeader className="flex flex-col sm:flex-row items-center justify-center gap-2 pb-2">
+                    <div>
+                        <CarFront className="h-4 w-4 text-muted-foreground" />
+                    </div>
                     <CardTitle className="text-sm font-medium">Autos Básicos</CardTitle>
-                    <CarFront className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                    <div className="text-2xl font-bold">{carsByType[0]}</div>
+                    <div className="text-2xl font-bold text-center">{carsByType[0]}</div>
                 </CardContent>
             </Card>
             <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardHeader className="flex flex-col sm:flex-row items-center justify-center gap-2 pb-2">
+                    <div>
+                        <Sparkles className="h-4 w-4 text-muted-foreground" />
+                    </div>
                     <CardTitle className="text-sm font-medium">Autos Premium</CardTitle>
-                    <Sparkles className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                    <div className="text-2xl font-bold">{carsByType[1]}</div>
+                    <div className="text-2xl font-bold text-center">{carsByType[1]}</div>
                 </CardContent>
             </Card>
         </motion.div>

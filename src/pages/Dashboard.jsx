@@ -255,10 +255,12 @@ function Dashboard({ carsData = [] }) {
                     <main className="container mx-auto p-4 pb-20">
                         <Tabs value={activeTab} onValueChange={setActiveTab}>
                             <TabsContent value="home" className="space-y-4">
-                                <StatsCards
-                                    cars={cars}
-                                    carsByType={carsByType}
-                                />
+                                <div>
+                                    <StatsCards
+                                        cars={cars}
+                                        carsByType={carsByType}
+                                    />
+                                </div>
 
                                 <div className="flex flex-wrap gap-4 mb-4">
                                     <div className="flex-grow relative">
@@ -295,7 +297,6 @@ function Dashboard({ carsData = [] }) {
                                     currentPage={currentPage}
                                     totalPages={totalPages}
                                 />
-
                                 <dir>
                                     <Carrusel />
                                 </dir>
