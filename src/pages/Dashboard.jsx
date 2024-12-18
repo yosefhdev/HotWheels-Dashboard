@@ -7,23 +7,16 @@ import Graficas from '@/components/Graficas';
 import Header from '@/components/Header';
 import Loader2 from '@/components/Loader2';
 import NavBar from '@/components/NavBar';
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { ArcElement, BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Title, Tooltip } from 'chart.js';
-import { motion } from 'framer-motion';
-import { AlertCircle, Calendar, Car, CarFront, CheckCircle2, ChevronDown, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, ChevronUp, Clock, Filter, Link, Palette, PenSquare, Search, Sparkles, Tag, X } from 'lucide-react';
-import Carrusel from '@/components/Carrusel';
-import EditForm from '@/components/EditForm';
-import StatsCards from '@/components/StatsCards';
-import Filters from '@/components/Filters';
+import { AlertCircle, CheckCircle2, ChevronDown, ChevronUp, Search } from 'lucide-react';
+// import Carrusel from '@/components/Carrusel';
 import CarsTable from '@/components/CarsTable';
+import EditForm from '@/components/EditForm';
+import Filters from '@/components/Filters';
+import StatsCards from '@/components/StatsCards';
 
 ChartJS.register(
     CategoryScale,
