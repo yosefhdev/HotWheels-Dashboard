@@ -297,9 +297,9 @@ function Dashboard({ carsData = [] }) {
                                     currentPage={currentPage}
                                     totalPages={totalPages}
                                 />
-                                <dir>
+                                {/* <dir>
                                     <Carrusel />
-                                </dir>
+                                </dir> */}
                             </TabsContent>
 
                             {/* Add form */}
